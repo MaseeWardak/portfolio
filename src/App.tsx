@@ -1,5 +1,7 @@
 import './index.css'
+import { useState } from 'react'
 import { useTheme, ThemeProvider } from './context/ThemeContext'
+import BootSequence from './components/BootSequence'
 import Nav from './components/Nav'
 import Hero from './components/Hero'
 import About from './components/About'
@@ -11,12 +13,20 @@ import Contact from './components/Contact'
 function AppContent() {
   const { theme } = useTheme()
 
+  // Check sessionStorage synchronously so the boot screen is never shown on revisit
+  const [bootDone, setBootDone] = useState(() => {
+    try { return !!sessionStorage.getItem('wardak-booted') } catch { return false }
+  })
+
   return (
     <div
       data-theme={theme}
       className="relative min-h-screen"
       style={{ background: 'var(--bg)', transition: 'background-color 0.35s ease' }}
     >
+      {/* ── Boot sequence (first visit only) ── */}
+      {!bootDone && <BootSequence onComplete={() => setBootDone(true)} />}
+
       {/* ── Fixed grid background ── */}
       <div className="grid-background" aria-hidden="true">
         <div className="grid-lines" />
@@ -27,17 +37,12 @@ function AppContent() {
       <Nav />
 
       {/* ── Main content ── */}
-      <main>
+      <main className="premium-main">
         <Hero />
-        <div className="section-divider" />
         <About />
-        <div className="section-divider" />
         <Experience />
-        <div className="section-divider" />
         <Projects />
-        <div className="section-divider" />
         <Hackathons />
-        <div className="section-divider" />
         <Contact />
       </main>
     </div>

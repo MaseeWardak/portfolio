@@ -1,124 +1,143 @@
 import { useInView } from '../hooks/useInView'
 
-const STATS = [
-  { value: '00+', label: 'Projects Built' },
-  { value: '00+', label: 'Hackathons' },
-  { value: '0.0', label: 'GPA' },
-  { value: '00+', label: 'Contributions' },
+const SKILLS = [
+  'Python', 'C / C++', 'VHDL', 'MATLAB',
+  'TypeScript', 'React', 'Node.js', 'Git',
+  'KiCad', 'LTspice', 'Linux', 'Docker',
 ]
 
-const SKILLS = [
-  'TypeScript', 'React', 'Node.js', 'Python',
-  'PostgreSQL', 'Docker', 'AWS', 'Figma',
+const RATINGS = [
+  { param: 'Coffee Consumption',    min: '0',   max: '\u221e',    unit: 'cups / day' },
+  { param: 'Hours Without Sleep',   min: '0',   max: '36',        unit: 'h'          },
+  { param: 'Simultaneous PRs',      min: '0',   max: '12',        unit: '\u2014'     },
+  { param: 'Browser Tabs Open',     min: '1',   max: '847',       unit: 'tabs'       },
+  { param: 'Deadline Proximity',    min: '0',   max: 'T\u20130',  unit: '\u2014'     },
+]
+
+const DIFFERENTIATORS = [
+  'Bridges embedded systems and polished frontend experiences',
+  'Strong in rapid prototyping under hard deadlines',
+  'Comfortable owning projects from architecture to final demo',
 ]
 
 export default function About() {
-  const [sectionRef, inView]   = useInView<HTMLElement>({ threshold: 0.1 })
-  const [statsRef, statsInView] = useInView<HTMLDivElement>({ threshold: 0.2 })
+  const [sectionRef, inView] = useInView<HTMLElement>({ threshold: 0.08 })
 
   return (
     <section id="about" ref={sectionRef} className="relative z-10">
       <div className="section-wrapper">
 
-        {/* Heading */}
+        {/* ── Heading ── */}
         <div className={`animate-on-scroll ${inView ? 'in-view' : ''}`}>
-          <span className="heading-eyebrow">About</span>
+          <span className="heading-eyebrow">1.0 Description</span>
           <h2 className="section-heading">Who I Am</h2>
         </div>
 
-        {/* Two-column layout */}
-        <div className={`grid grid-cols-1 lg:grid-cols-5 gap-12 stagger-children ${inView ? 'in-view' : ''}`}>
+        {/* ── Two-column body ── */}
+        <div className={`grid grid-cols-1 lg:grid-cols-5 gap-10 stagger-children ${inView ? 'in-view' : ''}`}>
 
-          {/* Bio — left column */}
-          <div className="lg:col-span-3 space-y-5">
-            <p className="text-lg font-light leading-relaxed" style={{ color: 'var(--text-primary)' }}>
-              Placeholder bio paragraph one. This is where a compelling introduction goes — a sentence or two about who you are, what drives you, and what makes you different from the crowd. Keep it sharp and personal.
-            </p>
-            <p className="leading-relaxed" style={{ color: 'var(--text-muted)' }}>
-              Placeholder paragraph two. Expand on your background — your academic focus, the kinds of problems you love solving, and any notable context about your journey. Two to three sentences max.
-            </p>
-            <p className="leading-relaxed" style={{ color: 'var(--text-muted)' }}>
-              Placeholder paragraph three. A closing thought — what you're currently building, learning, or looking for. Leave room to mention interests outside of engineering if relevant.
-            </p>
+          {/* ── Left column — 1.1 + 1.2 ── */}
+          <div className="lg:col-span-3 space-y-8">
 
-            {/* Skills */}
-            <div className="pt-4">
-              <p
-                className="mono-label mb-4"
-                style={{ color: 'var(--accent)', letterSpacing: '0.2em' }}
-              >
-                Technologies
+            {/* 1.1 General Description */}
+            <div>
+              <div className="ds-section-label">1.1 General Description</div>
+              <p className="text-lg font-light leading-relaxed" style={{ color: 'var(--text-primary)' }}>
+                Electrical Engineering student at the University of Waterloo
+                with a focus on embedded systems, signal processing, and full stack software.
+                Driven by the challenge of bridging hardware and software into cohesive,
+                reliable systems.
               </p>
-              <div className="flex flex-wrap gap-2">
+              <p className="mt-4 leading-relaxed" style={{ color: 'var(--text-muted)' }}>
+                Equal parts engineer and builder, comfortable reading datasheets at 2 AM as
+                much as shipping production code. Obsessive about clean design, tight feedback
+                loops, and learning in public.
+              </p>
+              <p className="mt-4 leading-relaxed" style={{ color: 'var(--text-muted)' }}>
+                Currently looking for coop opportunities where I can contribute to real
+                products, break things responsibly, and grow fast. Available starting
+                Fall 2026.
+              </p>
+            </div>
+
+            {/* 1.2 Features */}
+            <div>
+              <div className="ds-section-label">1.2 Features</div>
+              <ul className="space-y-1 mb-4" style={{ color: 'var(--text-secondary)', fontSize: '0.9rem', lineHeight: '1.8' }}>
+                <li className="flex items-start gap-2">
+                  <span style={{ color: 'var(--accent)', fontFamily: 'Share Tech Mono, monospace' }}>+</span>
+                  Multidomain capability: analog circuits, digital logic, and web systems
+                </li>
+                <li className="flex items-start gap-2">
+                  <span style={{ color: 'var(--accent)', fontFamily: 'Share Tech Mono, monospace' }}>+</span>
+                  Proven under pressure, 3+ hackathons with shipped prototypes
+                </li>
+                <li className="flex items-start gap-2">
+                  <span style={{ color: 'var(--accent)', fontFamily: 'Share Tech Mono, monospace' }}>+</span>
+                  Fast ramp up on new tools, languages, and domains
+                </li>
+                <li className="flex items-start gap-2">
+                  <span style={{ color: 'var(--accent)', fontFamily: 'Share Tech Mono, monospace' }}>+</span>
+                  Strong written and verbal communication, thinks in diagrams
+                </li>
+              </ul>
+              <div className="flex flex-wrap gap-2 mt-3">
                 {SKILLS.map((skill) => (
-                  <span key={skill} className="tag-pill cursor-default">
-                    {skill}
-                  </span>
+                  <span key={skill} className="tag-pill cursor-default">{skill}</span>
                 ))}
               </div>
             </div>
+
           </div>
 
-          {/* Photo placeholder — right column */}
-          <div className="lg:col-span-2">
-            <div
-              className="relative w-full aspect-[4/5] max-w-xs mx-auto lg:mx-0 transition-shadow duration-300"
-              style={{
-                border: '1px solid var(--border)',
-                background: 'var(--bg-card)',
-                boxShadow: 'var(--shadow-card)',
-              }}
-            >
-              {/* Accent corner accent */}
-              <div
-                className="absolute top-0 left-0 w-12 h-12"
-                style={{
-                  background: 'var(--accent)',
-                  opacity: 0.12,
-                }}
-              />
-              <div className="absolute inset-0 flex flex-col items-center justify-center gap-3">
-                <svg width="48" height="48" viewBox="0 0 48 48" fill="none">
-                  <circle cx="24" cy="18" r="8" stroke="var(--border)" strokeWidth="1.5" />
-                  <path d="M6 40c0-9.941 8.059-18 18-18s18 8.059 18 18" stroke="var(--border)" strokeWidth="1.5" />
-                </svg>
-                <span className="font-mono" style={{ color: 'var(--text-muted)', fontSize: '0.65rem', letterSpacing: '0.2em', opacity: 0.6 }}>
-                  PHOTO.JPG
-                </span>
-              </div>
+          {/* ── Right column — 1.3 + 1.4 ── */}
+          <div className="lg:col-span-2 space-y-8">
 
-              {/* Bottom accent bar */}
-              <div
-                className="absolute bottom-0 left-0 right-0 h-1"
-                style={{ background: 'var(--accent)', opacity: 0.4 }}
-              />
+            {/* 1.3 Absolute Maximum Ratings */}
+            <div>
+              <div className="ds-section-label">1.3 Absolute Maximum Ratings</div>
+              <div style={{ overflowX: 'auto' }}>
+                <table className="ds-table">
+                  <thead>
+                    <tr>
+                      <th>Parameter</th>
+                      <th>Min</th>
+                      <th>Max</th>
+                      <th>Unit</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {RATINGS.map((row) => (
+                      <tr key={row.param}>
+                        <td>{row.param}</td>
+                        <td>{row.min}</td>
+                        <td>{row.max}</td>
+                        <td>{row.unit}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+              <div className="ds-note">
+                <strong style={{ color: 'var(--accent)' }}>Note&nbsp;1:</strong> Exceeding maximum ratings may result in
+                irreversible damage to project timelines and advisor relationships.
+              </div>
             </div>
+
+            {/* 1.4 What makes me different */}
+            <div>
+              <div className="ds-section-label">1.4 Differentiators</div>
+              <div className="space-y-3">
+                {DIFFERENTIATORS.map((point, index) => (
+                  <div key={point} className="about-highlight-row">
+                    <span className="about-highlight-index">0{index + 1}</span>
+                    <span style={{ color: 'var(--text-secondary)' }}>{point}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+
           </div>
-        </div>
-
-        {/* Stats row */}
-        <div
-          ref={statsRef}
-          className={`grid grid-cols-2 md:grid-cols-4 gap-4 mt-14 stagger-children ${statsInView ? 'in-view' : ''}`}
-        >
-          {STATS.map((stat) => (
-            <div
-              key={stat.label}
-              className="text-center py-7 px-4 transition-all duration-300"
-              style={{
-                background: 'var(--bg-card)',
-                border: '1px solid var(--border)',
-                boxShadow: 'var(--shadow-card)',
-              }}
-            >
-              <div className="font-heading font-black text-4xl mb-1" style={{ color: 'var(--accent)' }}>
-                {stat.value}
-              </div>
-              <div className="font-mono" style={{ fontSize: '0.65rem', letterSpacing: '0.15em', color: 'var(--text-muted)' }}>
-                {stat.label.toUpperCase()}
-              </div>
-            </div>
-          ))}
         </div>
 
       </div>

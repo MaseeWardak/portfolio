@@ -1,10 +1,10 @@
 import { useEffect, useReducer, useRef } from 'react'
 
 const TYPEWRITER_STRINGS = [
-  'Building things that matter.',
-  'Full-stack engineer.',
-  'Hackathon competitor.',
-  'Problem solver at heart.',
+  'Embedded systems designer.',
+  'Full stack and firmware.',
+  'Circuits to cloud, and back.',
+  'UW Electrical Engineering.',
 ]
 
 interface TWState {
@@ -72,7 +72,8 @@ export default function Hero() {
     <section
       ref={heroRef}
       id="hero"
-      className="relative min-h-screen flex flex-col items-center justify-center overflow-hidden z-10"
+      className="relative min-h-[60vh] md:min-h-[66vh] flex flex-col items-center justify-start overflow-hidden z-10"
+      style={{ paddingTop: '3.75rem' }}
     >
       {/* ── Abstract blob — top right ── */}
       <div
@@ -128,127 +129,136 @@ export default function Hero() {
       </div>
 
       {/* ── Main content ── */}
-      <div className="relative z-10 w-full max-w-5xl mx-auto px-6 pt-20 pb-28 text-center">
-
-        {/* Eyebrow */}
-        <div
-          className="mono-label mb-5"
-          style={{ color: 'var(--accent)', animation: 'fade-up 0.6s ease 0.1s both' }}
-        >
-          <span style={{ opacity: 0.6 }}>{'>'}</span> Portfolio — Available for Work
-        </div>
-
-        {/* Giant name */}
-        <h1
-          className="font-heading font-black uppercase leading-none mb-4"
-          style={{
-            fontSize: 'clamp(3rem, 10vw, 8rem)',
-            letterSpacing: '0.05em',
-            color: 'var(--text-primary)',
-            animation: 'fade-up 0.7s ease 0.2s both',
-          }}
-        >
-          Maseehullah
-          <br />
-          <span style={{ color: 'var(--accent)' }}>Wardak</span>
-        </h1>
-
-        {/* Role / University */}
-        <div
-          className="font-mono uppercase mb-8"
-          style={{
-            color: 'var(--text-muted)',
-            fontSize: '0.8rem',
-            letterSpacing: '0.22em',
-            animation: 'fade-up 0.7s ease 0.35s both',
-          }}
-        >
-          Electrical Engineering &nbsp;·&nbsp; University of Waterloo &nbsp;·&nbsp; Class of 2030
-        </div>
-
-        {/* Typewriter */}
-        <div
-          className="flex items-center justify-center h-8 text-lg mb-10"
-          style={{ animation: 'fade-up 0.7s ease 0.5s both' }}
-        >
-          <span className="typewriter-text">{typed}</span>
-          <span className="cursor-blink" />
-        </div>
-
-        {/* CTA buttons */}
-        <div
-          className="flex flex-wrap items-center justify-center gap-4"
-          style={{ animation: 'fade-up 0.7s ease 0.65s both' }}
-        >
-          <button
-            onClick={() => document.getElementById('projects')?.scrollIntoView({ behavior: 'smooth' })}
-            className="hero-btn-primary"
-          >
-            View Projects
-          </button>
-          <button
-            onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })}
-            className="hero-btn-secondary"
-          >
-            Get in Touch
-          </button>
-        </div>
-
-        {/* Quick stats strip */}
-        <div
-          className="flex flex-wrap items-center justify-center gap-12 mt-16 pt-8"
-          style={{ borderTop: '1px solid var(--border)', animation: 'fade-up 0.7s ease 0.8s both' }}
-        >
-          {[['5+', 'Projects'], ['3+', 'Hackathons'], ['1', 'Internship']].map(([val, label]) => (
-            <div key={label} className="text-center">
-              <div
-                className="font-heading font-black leading-none"
-                style={{ fontSize: '1.75rem', color: 'var(--accent)' }}
-              >
-                {val}
-              </div>
-              <div
-                className="font-mono mt-1"
-                style={{ fontSize: '0.62rem', letterSpacing: '0.15em', color: 'var(--text-muted)' }}
-              >
-                {label.toUpperCase()}
-              </div>
+      <div className="relative z-10 w-full max-w-6xl mx-auto px-6 pt-4 pb-4 md:pt-6 md:pb-6">
+        <div className="hero-panel">
+          <div>
+            <div
+              className="mono-label mb-5"
+              style={{ color: 'var(--accent)', animation: 'fade-up 0.6s ease 0.1s both' }}
+            >
+              <span style={{ opacity: 0.6 }}>{'>'}</span> Embedded + Full stack Engineer
             </div>
-          ))}
-        </div>
-      </div>
 
-      {/* Coordinate label — bottom right */}
-      <div
-        className="absolute bottom-10 right-6 font-mono opacity-50"
-        style={{
-          color: 'var(--text-muted)',
-          fontSize: '0.62rem',
-          letterSpacing: '0.1em',
-          animation: 'fade-up 0.7s ease 0.9s both',
-        }}
-      >
-        [ 00.0000° N, 00.0000° W ]
+            <h1
+              className="font-heading font-black uppercase leading-none mb-6"
+              style={{
+                fontSize: 'clamp(2.8rem, 8.5vw, 6.8rem)',
+                letterSpacing: '0.04em',
+                color: 'var(--text-primary)',
+                animation: 'fade-up 0.7s ease 0.2s both',
+              }}
+            >
+              Maseehullah
+              <br />
+              <span className="hero-surname">
+                <span style={{ color: 'var(--accent)' }}>Wardak</span>
+                <span className="hero-bolt" aria-hidden="true">
+                  <svg className="hero-bolt-svg" width="64" height="64" viewBox="0 0 64 64" fill="none">
+                    <defs>
+                      <linearGradient id="boltGradient" x1="16" y1="8" x2="48" y2="56" gradientUnits="userSpaceOnUse">
+                        <stop offset="0%" stopColor="#ffe870" />
+                        <stop offset="45%" stopColor="#ffcc00" />
+                        <stop offset="100%" stopColor="#f0a400" />
+                      </linearGradient>
+                    </defs>
+                    <path
+                      d="M36.5 6L18.5 33h13l-5 25 19-30H33.5l3-22z"
+                      fill="url(#boltGradient)"
+                      stroke="#fff5b3"
+                      strokeWidth="1.5"
+                      strokeLinejoin="round"
+                    />
+                    <path
+                      d="M36.5 6L18.5 33h13l-5 25 19-30H33.5l3-22z"
+                      stroke="var(--accent)"
+                      strokeWidth="2.6"
+                      strokeOpacity="0.3"
+                      strokeLinejoin="round"
+                    />
+                  </svg>
+                </span>
+              </span>
+            </h1>
+
+            <p
+              className="max-w-xl mb-7"
+              style={{
+                color: 'var(--text-secondary)',
+                fontSize: '1.02rem',
+                lineHeight: 1.8,
+                animation: 'fade-up 0.7s ease 0.35s both',
+              }}
+            >
+              I design reliable systems that connect low level hardware thinking with polished software execution.
+              Focused on impactful coop opportunities for Fall 2026.
+            </p>
+
+            <div
+              className="flex items-center h-8 text-lg mb-9"
+              style={{ animation: 'fade-up 0.7s ease 0.5s both' }}
+            >
+              <span className="typewriter-text">{typed}</span>
+              <span className="cursor-blink" />
+            </div>
+
+            <div
+              className="flex flex-wrap items-center gap-4"
+              style={{ animation: 'fade-up 0.7s ease 0.65s both' }}
+            >
+              <button
+                onClick={() => document.getElementById('projects')?.scrollIntoView({ behavior: 'smooth' })}
+                className="hero-btn-primary"
+              >
+                View Projects
+              </button>
+              <button
+                onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })}
+                className="hero-btn-secondary"
+              >
+                Contact Me
+              </button>
+            </div>
+          </div>
+
+          <aside
+            className="hero-facts"
+            style={{ animation: 'fade-up 0.7s ease 0.45s both' }}
+          >
+            <p className="hero-facts-title">At a Glance</p>
+            {[
+              ['Discipline', 'Electrical Engineering'],
+              ['Institution', 'University of Waterloo'],
+              ['Availability', 'Fall 2026 Coop'],
+            ].map(([label, value]) => (
+              <div key={label} className="hero-fact-row">
+                <span>{label}</span>
+                <span>{value}</span>
+              </div>
+            ))}
+          </aside>
+        </div>
       </div>
 
       {/* Scroll arrow — bottom center */}
-      <div
-        onClick={() => document.getElementById('about')?.scrollIntoView({ behavior: 'smooth' })}
-        className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-1 cursor-pointer opacity-40 hover:opacity-80 transition-opacity duration-200"
-        style={{ animation: 'fade-up 0.7s ease 1s both' }}
-      >
-        <span
-          className="font-mono"
-          style={{ fontSize: '0.58rem', letterSpacing: '0.2em', color: 'var(--text-muted)' }}
+      <div className="w-full flex justify-center pb-4">
+        <div
+          onClick={() => document.getElementById('about')?.scrollIntoView({ behavior: 'smooth' })}
+          className="flex flex-col items-center gap-1 cursor-pointer opacity-40 hover:opacity-80 transition-opacity duration-200"
+          style={{ animation: 'fade-up 0.7s ease 1s both' }}
         >
-          SCROLL
-        </span>
-        <svg
-          width="18" height="18" viewBox="0 0 18 18" fill="none"
-          style={{ animation: 'bounce-arrow 1.4s ease-in-out infinite', color: 'var(--text-muted)' }}
-        >
-          <path d="M9 2v14M9 16L3 10M9 16l6-6" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-        </svg>
+          <span
+            className="font-mono"
+            style={{ fontSize: '0.58rem', letterSpacing: '0.2em', color: 'var(--text-muted)' }}
+          >
+            SCROLL
+          </span>
+          <svg
+            width="18" height="18" viewBox="0 0 18 18" fill="none"
+            style={{ animation: 'bounce-arrow 1.4s ease-in-out infinite', color: 'var(--text-muted)' }}
+          >
+            <path d="M9 2v14M9 16L3 10M9 16l6-6" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+          </svg>
+        </div>
       </div>
     </section>
   )

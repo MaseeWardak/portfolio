@@ -1,15 +1,53 @@
 import { useEffect, useRef, useState } from 'react'
 import { useTheme } from '../context/ThemeContext'
+import { useLanguage, type Language } from '../context/LanguageContext'
 
-const NAV_LINKS = [
-  { label: 'ABOUT',      href: '#about' },
-  { label: 'EXPERIENCE', href: '#experience' },
-  { label: 'PROJECTS',   href: '#projects' },
-  { label: 'HACKATHONS', href: '#hackathons' },
-  { label: 'CONTACT',    href: '#contact' },
+const NAV_LINKS = {
+  en: [
+    { label: 'ABOUT', href: '#about' },
+    { label: 'EXPERIENCE', href: '#experience' },
+    { label: 'PROJECTS', href: '#projects' },
+    { label: 'HACKATHONS', href: '#hackathons' },
+    { label: 'CONTACT', href: '#contact' },
+  ],
+  ps: [
+    { label: 'زما په اړه', href: '#about' },
+    { label: 'تجربه', href: '#experience' },
+    { label: 'پروژې', href: '#projects' },
+    { label: 'هیکاتونونه', href: '#hackathons' },
+    { label: 'اړیکه', href: '#contact' },
+  ],
+  fa: [
+    { label: 'درباره من', href: '#about' },
+    { label: 'تجربه', href: '#experience' },
+    { label: 'پروژه ها', href: '#projects' },
+    { label: 'هکاتون ها', href: '#hackathons' },
+    { label: 'تماس', href: '#contact' },
+  ],
+  fr: [
+    { label: 'À PROPOS', href: '#about' },
+    { label: 'EXPÉRIENCE', href: '#experience' },
+    { label: 'PROJETS', href: '#projects' },
+    { label: 'HACKATHONS', href: '#hackathons' },
+    { label: 'CONTACT', href: '#contact' },
+  ],
+} satisfies Record<Language, { label: string; href: string }[]>
+
+const SECTION_IDS = NAV_LINKS.en.map((l) => l.href.slice(1))
+
+const LANGUAGE_OPTIONS: { value: Language; label: string }[] = [
+  { value: 'en', label: 'English' },
+  { value: 'ps', label: 'پښتو' },
+  { value: 'fa', label: 'فارسی' },
+  { value: 'fr', label: 'Français' },
 ]
 
-const SECTION_IDS = NAV_LINKS.map((l) => l.href.slice(1))
+const UI_COPY = {
+  en: { dark: 'DARK MODE', light: 'LIGHT MODE', selectLang: 'Select language' },
+  ps: { dark: 'توره بڼه', light: 'روښانه بڼه', selectLang: 'ژبه وټاکئ' },
+  fa: { dark: 'حالت تیره', light: 'حالت روشن', selectLang: 'انتخاب زبان' },
+  fr: { dark: 'MODE SOMBRE', light: 'MODE CLAIR', selectLang: 'Choisir la langue' },
+} satisfies Record<Language, { dark: string; light: string; selectLang: string }>
 
 function SunIcon() {
   return (
@@ -37,10 +75,13 @@ function MoonIcon() {
 
 export default function Nav() {
   const { theme, toggleTheme } = useTheme()
+  const { language, setLanguage } = useLanguage()
   const [activeSection, setActiveSection] = useState<string>('')
   const [menuOpen, setMenuOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
   const observersRef = useRef<IntersectionObserver[]>([])
+  const links = NAV_LINKS[language]
+  const ui = UI_COPY[language]
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 40)
@@ -106,7 +147,7 @@ export default function Nav() {
 
           {/* Desktop links */}
           <ul className="hidden md:flex items-center gap-7">
-            {NAV_LINKS.map((link) => (
+            {links.map((link) => (
               <li key={link.href}>
                 <button
                   onClick={() => handleNavClick(link.href)}
@@ -120,11 +161,31 @@ export default function Nav() {
 
           {/* Right controls */}
           <div className="flex items-center gap-3">
+            <label className="hidden md:block">
+              <select
+                value={language}
+                onChange={(e) => setLanguage(e.target.value as Language)}
+                aria-label={ui.selectLang}
+                className="font-mono text-xs px-2 py-1 outline-none"
+                style={{
+                  border: '1px solid var(--border)',
+                  background: 'var(--bg-card)',
+                  color: 'var(--text-muted)',
+                }}
+              >
+                {LANGUAGE_OPTIONS.map((option) => (
+                  <option key={option.value} value={option.value}>
+                    {option.label}
+                  </option>
+                ))}
+              </select>
+            </label>
+
             {/* Theme toggle */}
             <button
               className="theme-toggle"
               onClick={toggleTheme}
-              aria-label={theme === 'light' ? 'Switch to dark mode' : 'Switch to light mode'}
+              aria-label={theme === 'light' ? 'Switch theme to dark mode' : 'Switch theme to light mode'}
             >
               {theme === 'light' ? <MoonIcon /> : <SunIcon />}
             </button>
@@ -176,7 +237,7 @@ export default function Nav() {
         }}
       >
         <ul className="flex flex-col items-center gap-10">
-          {NAV_LINKS.map((link, i) => (
+          {links.map((link, i) => (
             <li
               key={link.href}
               style={{
@@ -203,15 +264,37 @@ export default function Nav() {
           ))}
         </ul>
 
-        {/* Theme toggle inside mobile menu */}
-        <button
-          className="theme-toggle mt-14 flex items-center gap-2"
-          onClick={toggleTheme}
-          style={{ color: 'var(--text-muted)', fontSize: '0.75rem', fontFamily: 'var(--font-mono)', letterSpacing: '0.15em' }}
-        >
-          {theme === 'light' ? <MoonIcon /> : <SunIcon />}
-          <span>{theme === 'light' ? 'DARK MODE' : 'LIGHT MODE'}</span>
-        </button>
+        <div className="mt-12 flex flex-col items-center gap-6">
+          <label>
+            <select
+              value={language}
+              onChange={(e) => setLanguage(e.target.value as Language)}
+              aria-label={ui.selectLang}
+              className="font-mono text-sm px-3 py-2 outline-none"
+              style={{
+                border: '1px solid var(--border)',
+                background: 'var(--bg-card)',
+                color: 'var(--text-muted)',
+              }}
+            >
+              {LANGUAGE_OPTIONS.map((option) => (
+                <option key={option.value} value={option.value}>
+                  {option.label}
+                </option>
+              ))}
+            </select>
+          </label>
+
+          {/* Theme toggle inside mobile menu */}
+          <button
+            className="theme-toggle flex items-center gap-2"
+            onClick={toggleTheme}
+            style={{ color: 'var(--text-muted)', fontSize: '0.75rem', fontFamily: 'var(--font-mono)', letterSpacing: '0.15em' }}
+          >
+            {theme === 'light' ? <MoonIcon /> : <SunIcon />}
+            <span>{theme === 'light' ? ui.dark : ui.light}</span>
+          </button>
+        </div>
       </div>
     </>
   )

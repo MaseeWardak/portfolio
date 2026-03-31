@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
+import { useLanguage, type Language } from '../context/LanguageContext'
 
 // ── Line definitions ──────────────────────────────────────────────────────────
 
@@ -10,24 +11,62 @@ type BootLine =
 
 const TARGET_DOTS_WIDTH = 52
 
-const LINES: BootLine[] = [
-  { type: 'title',    text: 'WARDAK SYSTEMS \u2014 PORTFOLIO v2.1' },
-  { type: 'subtitle', text: 'Performing system initialization...' },
-  { type: 'blank' },
-  { type: 'progress' },
-  { type: 'blank' },
-  { type: 'ok', label: 'Mounting filesystem',            suffix: 'done' },
-  { type: 'ok', label: 'Loading EE modules',             suffix: 'done' },
-  { type: 'ok', label: 'Calibrating signal processors',  suffix: 'done' },
-  { type: 'ok', label: 'Linking TypeScript runtime',     suffix: 'done' },
-  { type: 'ok', label: 'Verifying academic credentials', suffix: 'done' },
-  { type: 'indent',  text: '         \u2514\u2500\u2500 University of Waterloo  \u00b7  Electrical Engineering' },
-  { type: 'ok', label: 'Running self diagnostics',        suffix: 'PASS' },
-  { type: 'ok', label: 'Starting portfolio kernel',      suffix: 'done' },
-  { type: 'blank' },
-  { type: 'success', text: 'All systems nominal.' },
-  { type: 'launch',  text: 'Launching WARDAK OS...' },
-]
+const BOOT_COPY = {
+  en: {
+    subtitle: 'Performing system initialization...',
+    lines: ['Mounting filesystem', 'Loading EE modules', 'Calibrating signal processors', 'Linking TypeScript runtime', 'Verifying academic credentials', 'Running self diagnostics', 'Starting portfolio kernel'],
+    indent: '         \u2514\u2500\u2500 University of Waterloo  \u00b7  برېښنايي انجنیري',
+    success: 'All systems nominal.',
+    launch: 'Launching WARDAK OS...',
+    skip: 'Press any key or click to skip',
+  },
+  ps: {
+    subtitle: 'سیسټم فعالېږي...',
+    lines: ['د فایل سیسټم لګول', 'د EE ماډیولونو لود کول', 'د سیګنال پروسس کالیبرېشن', 'د TypeScript runtime نښلول', 'اکادمیک سندونه تاییدول', 'ځان تشخیص', 'د portfolio kernel پیل'],
+    indent: '         \u2514\u2500\u2500 University of Waterloo  \u00b7  Electrical Engineering',
+    success: 'ټول سیستمونه عادي حالت کې دي.',
+    launch: 'WARDAK OS پیل کېږي...',
+    skip: 'د تېرېدو لپاره هره کیلي ووهئ',
+  },
+  fa: {
+    subtitle: 'در حال راه اندازی سیستم...',
+    lines: ['مونت کردن فایل سیستم', 'بارگذاری ماژول های EE', 'کالیبراسیون پردازش سیگنال', 'لینک کردن TypeScript runtime', 'بررسی مدارک تحصیلی', 'خودتشخیصی سیستم', 'شروع kernel پورتفولیو'],
+    indent: '         \u2514\u2500\u2500 University of Waterloo  \u00b7  Electrical Engineering',
+    success: 'همه سیستم ها پایدار است.',
+    launch: 'در حال اجرای WARDAK OS...',
+    skip: 'برای رد شدن کلید بزنید یا کلیک کنید',
+  },
+  fr: {
+    subtitle: 'Initialisation du système...',
+    lines: ['Montage du système de fichiers', 'Chargement des modules EE', 'Calibration du traitement du signal', 'Liaison du runtime TypeScript', 'Vérification des références académiques', 'Auto diagnostic', 'Démarrage du noyau du portfolio'],
+    indent: '         \u2514\u2500\u2500 University of Waterloo  \u00b7  Electrical Engineering',
+    success: 'Tous les systèmes sont stables.',
+    launch: 'Lancement de WARDAK OS...',
+    skip: 'Appuyez sur une touche ou cliquez pour passer',
+  },
+} satisfies Record<Language, { subtitle: string; lines: string[]; indent: string; success: string; launch: string; skip: string }>
+
+function getBootLines(language: Language): BootLine[] {
+  const copy = BOOT_COPY[language]
+  return [
+    { type: 'title', text: 'WARDAK SYSTEMS \u2014 PORTFOLIO v2.1' },
+    { type: 'subtitle', text: copy.subtitle },
+    { type: 'blank' },
+    { type: 'progress' },
+    { type: 'blank' },
+    { type: 'ok', label: copy.lines[0], suffix: 'done' },
+    { type: 'ok', label: copy.lines[1], suffix: 'done' },
+    { type: 'ok', label: copy.lines[2], suffix: 'done' },
+    { type: 'ok', label: copy.lines[3], suffix: 'done' },
+    { type: 'ok', label: copy.lines[4], suffix: 'done' },
+    { type: 'indent', text: copy.indent },
+    { type: 'ok', label: copy.lines[5], suffix: 'PASS' },
+    { type: 'ok', label: copy.lines[6], suffix: 'done' },
+    { type: 'blank' },
+    { type: 'success', text: copy.success },
+    { type: 'launch', text: copy.launch },
+  ]
+}
 
 const LINE_INTERVAL_MS = 150
 
@@ -105,6 +144,8 @@ interface BootSequenceProps {
 }
 
 export default function BootSequence({ onComplete }: BootSequenceProps) {
+  const { language } = useLanguage()
+  const lines = getBootLines(language)
   const [visibleCount, setVisibleCount] = useState(0)
   const [exiting, setExiting] = useState(false)
 
@@ -133,7 +174,7 @@ export default function BootSequence({ onComplete }: BootSequenceProps) {
     const timer = setInterval(() => {
       count++
       setVisibleCount(count)
-      if (count >= LINES.length) {
+      if (count >= lines.length) {
         clearInterval(timer)
         setTimeout(triggerExit, 900)
       }
@@ -161,11 +202,11 @@ export default function BootSequence({ onComplete }: BootSequenceProps) {
       onAnimationEnd={handleAnimationEnd}
     >
       <div className="boot-content font-mono">
-        {LINES.slice(0, visibleCount).map((line, i) => renderLine(line, i))}
+        {lines.slice(0, visibleCount).map((line, i) => renderLine(line, i))}
       </div>
 
       <div className="boot-skip-hint font-mono">
-        Press any key or click to skip
+        {BOOT_COPY[language].skip}
       </div>
     </div>
   )

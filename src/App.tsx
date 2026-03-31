@@ -1,6 +1,7 @@
 import './index.css'
 import { useState } from 'react'
 import { useTheme, ThemeProvider } from './context/ThemeContext'
+import { LanguageProvider, useLanguage } from './context/LanguageContext'
 import BootSequence from './components/BootSequence'
 import Nav from './components/Nav'
 import Hero from './components/Hero'
@@ -12,6 +13,7 @@ import Contact from './components/Contact'
 
 function AppContent() {
   const { theme } = useTheme()
+  const { isRtl } = useLanguage()
 
   // Check sessionStorage synchronously so the boot screen is never shown on revisit
   const [bootDone, setBootDone] = useState(() => {
@@ -21,6 +23,7 @@ function AppContent() {
   return (
     <div
       data-theme={theme}
+      dir={isRtl ? 'rtl' : 'ltr'}
       className="relative min-h-screen"
       style={{ background: 'var(--bg)', transition: 'background-color 0.35s ease' }}
     >
@@ -52,7 +55,9 @@ function AppContent() {
 export default function App() {
   return (
     <ThemeProvider>
-      <AppContent />
+      <LanguageProvider>
+        <AppContent />
+      </LanguageProvider>
     </ThemeProvider>
   )
 }

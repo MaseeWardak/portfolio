@@ -1,4 +1,5 @@
 import { useInView } from '../hooks/useInView'
+import { useLanguage, type Language } from '../context/LanguageContext'
 
 interface Project {
   number: string
@@ -9,25 +10,91 @@ interface Project {
   featured?: boolean
 }
 
-const PROJECTS: Project[] = [
-  {
-    number: '01',
-    title: 'Smart Bluetooth Rover',
-    description:
-      'Arduino powered rover with a laser cut plywood chassis, custom steering using an MG90S servo, Bluetooth control via HC 05, and automatic ultrasonic braking. Focused on motor control, sensor integration, and embedded systems fundamentals.',
-    tags: ['Arduino', 'Embedded Systems', 'Bluetooth', 'Ultrasonic Sensors'],
-    links: [{ label: 'GitHub', href: 'https://github.com/MaseeWardak/smart-bluetooth-rover' }],
-    featured: true,
-  },
-  {
-    number: '02',
-    title: 'ThermaRest Thermal Regulation Device',
-    description:
-      'Arduino R4 prototype using Peltier modules to automatically cool patients while monitoring body temperature and GSR. Includes LCD status display and relay control, designed as a safety focused concept to improve patient sleep comfort.',
-    tags: ['Arduino R4', 'Peltier Modules', 'Medical Prototype', 'Sensor Systems'],
-    links: [{ label: 'GitHub', href: 'https://github.com/MaseeWardak/ThermaRest-Thermal-Regulation-Device' }],
-  },
-]
+const PROJECTS = {
+  en: [
+    {
+      number: '01',
+      title: 'Smart Bluetooth Rover',
+      description:
+        'Arduino powered rover with a laser cut plywood chassis, custom steering using an MG90S servo, Bluetooth control via HC 05, and automatic ultrasonic braking. Focused on motor control, sensor integration, and embedded systems fundamentals.',
+      tags: ['Arduino', 'Embedded Systems', 'Bluetooth', 'Ultrasonic Sensors'],
+      links: [{ label: 'GitHub', href: 'https://github.com/MaseeWardak/smart-bluetooth-rover' }],
+      featured: true,
+    },
+    {
+      number: '02',
+      title: 'ThermaRest Thermal Regulation Device',
+      description:
+        'Arduino R4 prototype using Peltier modules to automatically cool patients while monitoring body temperature and GSR. Includes LCD status display and relay control, designed as a safety focused concept to improve patient sleep comfort.',
+      tags: ['Arduino R4', 'Peltier Modules', 'Medical Prototype', 'Sensor Systems'],
+      links: [{ label: 'GitHub', href: 'https://github.com/MaseeWardak/ThermaRest-Thermal-Regulation-Device' }],
+    },
+  ],
+  ps: [
+    {
+      number: '01',
+      title: 'Smart Bluetooth Rover',
+      description:
+        'د Arduino پر بنسټ روور چې laser cut plywood chassis لري، د MG90S servo له لارې custom steering لري، د HC 05 Bluetooth کنټرول لري، او د ultrasonic sensor په مرسته اتومات braking کوي.',
+      tags: ['Arduino', 'Embedded Systems', 'Bluetooth', 'Ultrasonic Sensors'],
+      links: [{ label: 'GitHub', href: 'https://github.com/MaseeWardak/smart-bluetooth-rover' }],
+      featured: true,
+    },
+    {
+      number: '02',
+      title: 'ThermaRest Thermal Regulation Device',
+      description:
+        'د Arduino R4 پروټوټایپ چې د Peltier modules په کارولو ناروغان یخوي او body temperature او GSR څاري. LCD status display او relay control لري، د ناروغ د خوب د راحت لپاره یوه امنه مفکوره.',
+      tags: ['Arduino R4', 'Peltier Modules', 'Medical Prototype', 'Sensor Systems'],
+      links: [{ label: 'GitHub', href: 'https://github.com/MaseeWardak/ThermaRest-Thermal-Regulation-Device' }],
+    },
+  ],
+  fa: [
+    {
+      number: '01',
+      title: 'Smart Bluetooth Rover',
+      description:
+        'روور مبتنی بر Arduino با شاسی laser cut plywood، فرمان custom با MG90S servo، کنترل Bluetooth با HC 05، و ترمز خودکار با ultrasonic sensor. تمرکز روی motor control، sensor integration، و مبانی سیستم های امبدد.',
+      tags: ['Arduino', 'Embedded Systems', 'Bluetooth', 'Ultrasonic Sensors'],
+      links: [{ label: 'GitHub', href: 'https://github.com/MaseeWardak/smart-bluetooth-rover' }],
+      featured: true,
+    },
+    {
+      number: '02',
+      title: 'ThermaRest Thermal Regulation Device',
+      description:
+        'پروتوتایپ Arduino R4 که با Peltier modules دمای بیمار را کاهش می دهد و body temperature و GSR را پایش می کند. شامل LCD status display و relay control، با تمرکز روی safety در کاربرد پزشکی.',
+      tags: ['Arduino R4', 'Peltier Modules', 'Medical Prototype', 'Sensor Systems'],
+      links: [{ label: 'GitHub', href: 'https://github.com/MaseeWardak/ThermaRest-Thermal-Regulation-Device' }],
+    },
+  ],
+  fr: [
+    {
+      number: '01',
+      title: 'Smart Bluetooth Rover',
+      description:
+        'Rover basé sur Arduino avec châssis en plywood découpé au laser, direction personnalisée via servo MG90S, contrôle Bluetooth via HC 05 et freinage automatique par capteur ultrasonique. Projet centré sur le contrôle moteur et l intégration capteurs.',
+      tags: ['Arduino', 'Embedded Systems', 'Bluetooth', 'Ultrasonic Sensors'],
+      links: [{ label: 'GitHub', href: 'https://github.com/MaseeWardak/smart-bluetooth-rover' }],
+      featured: true,
+    },
+    {
+      number: '02',
+      title: 'ThermaRest Thermal Regulation Device',
+      description:
+        'Prototype Arduino R4 utilisant des modules Peltier pour refroidir automatiquement les patients tout en surveillant la température corporelle et le GSR. Inclut un LCD status display et un relay control avec un focus sécurité.',
+      tags: ['Arduino R4', 'Peltier Modules', 'Medical Prototype', 'Sensor Systems'],
+      links: [{ label: 'GitHub', href: 'https://github.com/MaseeWardak/ThermaRest-Thermal-Regulation-Device' }],
+    },
+  ],
+} satisfies Record<Language, Project[]>
+
+const PROJECT_COPY = {
+  en: { eyebrow: '3.0 Reference Designs', heading: "What I've Built", featured: 'FEATURED', allGithub: 'VIEW ALL ON GITHUB' },
+  ps: { eyebrow: '۳.۰ پروژې', heading: 'ما څه جوړ کړي دي', featured: 'ځانګړې', allGithub: 'ټولې پروژې په GitHub کې وګورئ' },
+  fa: { eyebrow: '۳.۰ پروژه ها', heading: 'چه ساخته ام', featured: 'ویژه', allGithub: 'همه را در GitHub ببینید' },
+  fr: { eyebrow: '3.0 Réalisations', heading: 'Ce Que J Ai Construit', featured: 'VEDETTE', allGithub: 'VOIR TOUT SUR GITHUB' },
+} satisfies Record<Language, { eyebrow: string; heading: string; featured: string; allGithub: string }>
 
 interface ProjectCardProps {
   project: Project
@@ -36,6 +103,8 @@ interface ProjectCardProps {
 
 function ProjectCard({ project, index }: ProjectCardProps) {
   const [ref, inView] = useInView<HTMLDivElement>({ threshold: 0.1 })
+  const { language } = useLanguage()
+  const copy = PROJECT_COPY[language]
 
   return (
     <div
@@ -58,7 +127,7 @@ function ProjectCard({ project, index }: ProjectCardProps) {
               color: 'var(--accent-text)',
             }}
           >
-            FEATURED
+            {copy.featured}
           </span>
         )}
       </div>
@@ -114,6 +183,9 @@ function ProjectCard({ project, index }: ProjectCardProps) {
 }
 
 export default function Projects() {
+  const { language } = useLanguage()
+  const copy = PROJECT_COPY[language]
+  const projects = PROJECTS[language]
   const [sectionRef, inView] = useInView<HTMLElement>({ threshold: 0.05 })
 
   return (
@@ -122,13 +194,13 @@ export default function Projects() {
 
         {/* Heading */}
         <div className={`animate-on-scroll ${inView ? 'in-view' : ''}`}>
-          <span className="heading-eyebrow">3.0 Reference Designs</span>
-          <h2 className="section-heading">What I've Built</h2>
+          <span className="heading-eyebrow">{copy.eyebrow}</span>
+          <h2 className="section-heading">{copy.heading}</h2>
         </div>
 
         {/* Card grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {PROJECTS.map((project, i) => (
+          {projects.map((project, i) => (
             <ProjectCard key={project.number} project={project} index={i} />
           ))}
         </div>
@@ -147,7 +219,7 @@ export default function Projects() {
             onMouseEnter={(e) => { e.currentTarget.style.color = 'var(--accent)' }}
             onMouseLeave={(e) => { e.currentTarget.style.color = 'var(--text-muted)' }}
           >
-            VIEW ALL ON GITHUB
+            {copy.allGithub}
             <svg width="13" height="13" viewBox="0 0 14 14" fill="none">
               <path d="M1 13L13 1M13 1H5M13 1V9" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" />
             </svg>

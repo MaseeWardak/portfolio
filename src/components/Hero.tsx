@@ -1,11 +1,93 @@
 import { useEffect, useReducer, useRef } from 'react'
+import { useLanguage, type Language } from '../context/LanguageContext'
 
-const TYPEWRITER_STRINGS = [
-  'Embedded systems designer.',
-  'Full stack and firmware.',
-  'Circuits to cloud, and back.',
-  'UW Electrical Engineering.',
-]
+const HERO_COPY = {
+  en: {
+    typewriter: [
+      'Embedded systems designer.',
+      'Full stack and firmware.',
+      'Circuits to cloud, and back.',
+      'UW Electrical Engineering.',
+    ],
+    eyebrow: 'Embedded + Full stack Engineer',
+    intro: 'I design reliable systems that connect low level hardware thinking with polished software execution. Focused on impactful coop opportunities for Fall 2026.',
+    ctaProjects: 'View Projects',
+    ctaContact: 'Contact Me',
+    glanceTitle: 'At a Glance',
+    facts: [
+      ['Discipline', 'Electrical Engineering'],
+      ['Institution', 'University of Waterloo'],
+      ['Availability', 'Fall 2026 Coop'],
+    ],
+    scroll: 'SCROLL',
+  },
+  ps: {
+    typewriter: [
+      'د امبیډډ سیسټمونو ډیزاینر.',
+      'فول سټیک او فرموییر.',
+      'له سرکټه تر کلاوډه.',
+      'د واټرلو برېښنايي انجنیري.',
+    ],
+    eyebrow: 'امبیډډ + فول سټیک انجنیر',
+    intro: 'زه داسې باوري سیسټمونه جوړوم چې د ټیټې کچې هارډویر فکر د لوړ کیفیت سافټویر له پلي کېدو سره یوځای کوي. د ۲۰۲۶ د مني د کوپ اغېزمنو فرصتونو ته چمتو یم.',
+    ctaProjects: 'پروژې وګورئ',
+    ctaContact: 'اړیکه ونیسئ',
+    glanceTitle: 'لنډ معلومات',
+    facts: [
+      ['رشته', 'برېښنايي انجنیري'],
+      ['پوهنتون', 'واټرلو پوهنتون'],
+      ['لاسرسی', 'د ۲۰۲۶ د مني کوپ'],
+    ],
+    scroll: 'کښته لاړ شئ',
+  },
+  fa: {
+    typewriter: [
+      'طراح سیستم های امبدد.',
+      'فول استک و فرمور.',
+      'از مدار تا کلاود.',
+      'مهندسی برق واترلو.',
+    ],
+    eyebrow: 'امبدد + فول استک انجنیر',
+    intro: 'من سیستم های قابل اعتماد می سازم که تفکر سخت افزار سطح پایین را با اجرای نرم افزار باکیفیت وصل می کند. آماده فرصت های کوپ پاییز ۲۰۲۶ هستم.',
+    ctaProjects: 'دیدن پروژه ها',
+    ctaContact: 'تماس با من',
+    glanceTitle: 'نگاه سریع',
+    facts: [
+      ['رشته', 'مهندسی برق'],
+      ['دانشگاه', 'دانشگاه واترلو'],
+      ['زمان همکاری', 'کوپ پاییز ۲۰۲۶'],
+    ],
+    scroll: 'پایین بروید',
+  },
+  fr: {
+    typewriter: [
+      'Concepteur de systèmes embarqués.',
+      'Full stack et firmware.',
+      'Du circuit au cloud.',
+      'Génie électrique à Waterloo.',
+    ],
+    eyebrow: 'Ingénieur embarqué + full stack',
+    intro: 'Je conçois des systèmes fiables qui relient la pensée matérielle bas niveau à une exécution logicielle soignée. Ouvert aux stages coop pour l\'automne 2026.',
+    ctaProjects: 'Voir les projets',
+    ctaContact: 'Me contacter',
+    glanceTitle: 'Aperçu rapide',
+    facts: [
+      ['Discipline', 'Génie électrique'],
+      ['Université', 'University of Waterloo'],
+      ['Disponibilité', 'Coop automne 2026'],
+    ],
+    scroll: 'DÉFILER',
+  },
+} satisfies Record<Language, {
+  typewriter: string[]
+  eyebrow: string
+  intro: string
+  ctaProjects: string
+  ctaContact: string
+  glanceTitle: string
+  facts: [string, string][]
+  scroll: string
+}>
 
 interface TWState {
   display: string
@@ -39,11 +121,10 @@ function useTypewriter(strings: string[], speed = 60, pause = 1800) {
   const [state, dispatch] = useReducer(twReducer, {
     display: '', strIndex: 0, charIndex: 0, deleting: false,
   })
-  const stringsRef = useRef(strings)
 
   useEffect(() => {
     const { strIndex, charIndex, deleting, display } = state
-    const current = stringsRef.current[strIndex]
+    const current = strings[strIndex] ?? ''
 
     if (!deleting && charIndex < current.length) {
       const t = setTimeout(() => dispatch({ type: 'TYPE', char: current[charIndex] }), speed)
@@ -57,15 +138,17 @@ function useTypewriter(strings: string[], speed = 60, pause = 1800) {
       const t = setTimeout(() => dispatch({ type: 'DELETE' }), speed / 2)
       return () => clearTimeout(t)
     }
-    const t = setTimeout(() => dispatch({ type: 'NEXT_STRING', total: stringsRef.current.length }), speed)
+    const t = setTimeout(() => dispatch({ type: 'NEXT_STRING', total: strings.length }), speed)
     return () => clearTimeout(t)
-  }, [state, speed, pause])
+  }, [state, strings, speed, pause])
 
   return state.display
 }
 
 export default function Hero() {
-  const typed = useTypewriter(TYPEWRITER_STRINGS)
+  const { language } = useLanguage()
+  const copy = HERO_COPY[language]
+  const typed = useTypewriter(copy.typewriter)
   const heroRef = useRef<HTMLElement | null>(null)
 
   return (
@@ -136,7 +219,7 @@ export default function Hero() {
               className="mono-label mb-5"
               style={{ color: 'var(--accent)', animation: 'fade-up 0.6s ease 0.1s both' }}
             >
-              <span style={{ opacity: 0.6 }}>{'>'}</span> Embedded + Full stack Engineer
+              <span style={{ opacity: 0.6 }}>{'>'}</span> {copy.eyebrow}
             </div>
 
             <h1
@@ -189,8 +272,7 @@ export default function Hero() {
                 animation: 'fade-up 0.7s ease 0.35s both',
               }}
             >
-              I design reliable systems that connect low level hardware thinking with polished software execution.
-              Focused on impactful coop opportunities for Fall 2026.
+              {copy.intro}
             </p>
 
             <div
@@ -209,13 +291,13 @@ export default function Hero() {
                 onClick={() => document.getElementById('projects')?.scrollIntoView({ behavior: 'smooth' })}
                 className="hero-btn-primary"
               >
-                View Projects
+                {copy.ctaProjects}
               </button>
               <button
                 onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })}
                 className="hero-btn-secondary"
               >
-                Contact Me
+                {copy.ctaContact}
               </button>
             </div>
           </div>
@@ -224,12 +306,8 @@ export default function Hero() {
             className="hero-facts"
             style={{ animation: 'fade-up 0.7s ease 0.45s both' }}
           >
-            <p className="hero-facts-title">At a Glance</p>
-            {[
-              ['Discipline', 'Electrical Engineering'],
-              ['Institution', 'University of Waterloo'],
-              ['Availability', 'Fall 2026 Coop'],
-            ].map(([label, value]) => (
+            <p className="hero-facts-title">{copy.glanceTitle}</p>
+            {copy.facts.map(([label, value]) => (
               <div key={label} className="hero-fact-row">
                 <span>{label}</span>
                 <span>{value}</span>
@@ -250,7 +328,7 @@ export default function Hero() {
             className="font-mono"
             style={{ fontSize: '0.58rem', letterSpacing: '0.2em', color: 'var(--text-muted)' }}
           >
-            SCROLL
+            {copy.scroll}
           </span>
           <svg
             width="18" height="18" viewBox="0 0 18 18" fill="none"

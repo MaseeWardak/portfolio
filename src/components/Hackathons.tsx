@@ -6,46 +6,47 @@ interface Hackathon {
   event: string
   date: string
   description: string
-  award: string
+  outcome: string
   tags: string[]
+  link?: string
+  linkLabel?: string
 }
 
-const PLACEHOLDER_HACKATHONS: Hackathon[] = [
+const HACKATHONS: Hackathon[] = [
   {
     number: '01',
-    name: 'Placeholder Project Name',
-    event: 'Hackathon Event Name 20XX',
-    date: 'Month 20XX',
-    description: 'Brief description of what you built and the problem you were solving. Mention your team size and what role you played. Two sentences.',
-    award: '1st Place — Track Name',
-    tags: ['React', 'Python', 'OpenAI API'],
+    name: 'teddytalk with Arduino UNO Q',
+    event: 'MakeUofT 2026',
+    date: '2026',
+    description:
+      'Built an emotion aware AI companion fully standalone on Arduino UNO Q: camera capture, on device FER+ emotion inference, Gemini poem generation, and ElevenLabs speech output in one real time pipeline. The technical edge was mastering UNO Q\'s split architecture under hackathon pressure, using the Dragonwing MPU for inference and API orchestration and the STM32 MCU for responsive hardware I O through a custom Python RPC bridge.',
+    outcome: '2x Award Winner, Best Use of Arduino UNO Q (1st Place) plus Best Use of ElevenLabs API',
+    tags: ['Arduino UNO Q', 'Edge AI', 'FER+ ONNX', 'Gemini API', 'ElevenLabs'],
   },
   {
     number: '02',
-    name: 'Another Build Name',
-    event: 'University Hackathon 20XX',
-    date: 'Month 20XX',
-    description: 'Another hackathon project description. What was the theme or constraint? What did you ship in 24–48 hours? What would you improve?',
-    award: '2nd Place — Overall',
-    tags: ['Node.js', 'WebSockets', 'MongoDB'],
+    name: 'UnClutter',
+    event: 'Macathon 2026',
+    date: '2026',
+    description:
+      'Built under intense weekend pressure, UnClutter turns Gmail into workflow style cards instead of endless inbox rows. Integrated Google OAuth plus Gmail sync, Gemini powered summaries and reply assistance, and natural language sorting rules backed by Supabase while preserving core email workflows on real user data.',
+    outcome: 'MLH Award Winner, Best Use of Gemini API and Google Cloud',
+    tags: ['React + Vite', 'Node.js + Express', 'Gmail API', 'Supabase', 'Gemini API'],
+    link: 'https://devpost.com/software/unclutter-ljtwq4?ref_content=my-projects-tab&ref_feature=my_projects',
+    linkLabel: 'VIEW DEMO',
   },
   {
     number: '03',
-    name: 'Third Hackathon Build',
-    event: 'Corporate Sponsor Hackathon',
-    date: 'Month 20XX',
-    description: 'Third hackathon entry description. Even honorable mentions or strong submissions worth highlighting should go here. Judges noticed this.',
-    award: 'Best Technical Implementation',
-    tags: ['Rust', 'Embedded', 'IoT'],
-  },
-  {
-    number: '04',
-    name: 'Fourth Hackathon Entry',
-    event: 'National / Regional Competition',
-    date: 'Month 20XX',
-    description: 'Fourth hackathon entry. Could be an ongoing challenge, a remote hackathon, or a sponsored category win. Include the outcome even if not a podium finish.',
-    award: 'Finalist — 500+ teams',
-    tags: ['ML', 'FastAPI', 'AWS Lambda'],
+    name: 'Shafaf Global Humanitarian Aid Platform',
+    event: 'UmmaHacks',
+    date: '2026',
+    description:
+      'Built an aid transparency platform that maps humanitarian coverage and highlights underserved regions. ' +
+      'Included role based dashboard concepts for donors and organizations, with data driven planning for better aid distribution.',
+    outcome: 'First hackathon attended, participation',
+    tags: ['React', 'Maps', 'Data Visualization', 'Full stack'],
+    link: 'https://github.com/Awais-H/Shafaf-Aid',
+    linkLabel: 'VIEW ON GITHUB',
   },
 ]
 
@@ -94,7 +95,7 @@ function HackathonCard({ hackathon, index }: HackathonCardProps) {
         </span>
       </div>
 
-      {/* Award badge */}
+      {/* Outcome badge */}
       <div
         className="inline-flex items-center gap-2 mb-4 px-3 py-1.5 self-start"
         style={{
@@ -104,7 +105,7 @@ function HackathonCard({ hackathon, index }: HackathonCardProps) {
       >
         <span style={{ color: 'var(--accent)', fontSize: '0.9rem' }}>★</span>
         <span className="font-mono" style={{ fontSize: '0.7rem', letterSpacing: '0.08em', color: 'var(--accent)' }}>
-          {hackathon.award}
+          {hackathon.outcome}
         </span>
       </div>
 
@@ -119,6 +120,23 @@ function HackathonCard({ hackathon, index }: HackathonCardProps) {
           <span key={tag} className="tag-pill">{tag}</span>
         ))}
       </div>
+
+      {hackathon.link && (
+        <a
+          href={hackathon.link}
+          target="_blank"
+          rel="noreferrer"
+          className="font-mono mt-5 inline-flex items-center gap-1.5 transition-colors duration-200"
+          style={{ fontSize: '0.7rem', letterSpacing: '0.1em', color: 'var(--text-muted)' }}
+          onMouseEnter={(e) => { e.currentTarget.style.color = 'var(--accent)' }}
+          onMouseLeave={(e) => { e.currentTarget.style.color = 'var(--text-muted)' }}
+        >
+          {hackathon.linkLabel ?? 'VIEW PROJECT'}
+          <svg width="11" height="11" viewBox="0 0 12 12" fill="none">
+            <path d="M1 11L11 1M11 1H4M11 1V8" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" />
+          </svg>
+        </a>
+      )}
     </div>
   )
 }
@@ -132,7 +150,7 @@ export default function Hackathons() {
 
         {/* Heading */}
         <div className={`animate-on-scroll ${inView ? 'in-view' : ''}`}>
-          <span className="heading-eyebrow">Hackathons</span>
+          <span className="heading-eyebrow">4.0 Prototype Builds</span>
           <h2 className="section-heading">Competing to Build</h2>
         </div>
 
@@ -141,12 +159,12 @@ export default function Hackathons() {
           className={`max-w-2xl mb-12 animate-on-scroll ${inView ? 'in-view' : ''}`}
           style={{ color: 'var(--text-muted)', transitionDelay: '100ms' }}
         >
-          Placeholder intro — a sentence or two about your competitive mindset and what drives you to enter hackathons. Mention total events, wins, or a personal philosophy.
+          Hackathon builds where I collaborate under pressure and ship complete, demo ready systems. My strongest project is teddytalk at MakeUofT 2026: a fully standalone edge AI build on UNO Q that won two awards.
         </p>
 
         {/* 2×2 Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {PLACEHOLDER_HACKATHONS.map((h, i) => (
+          {HACKATHONS.map((h, i) => (
             <HackathonCard key={h.number} hackathon={h} index={i} />
           ))}
         </div>

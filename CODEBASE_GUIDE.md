@@ -8,7 +8,7 @@ Everything a developer needs to know to write code that fits cleanly into this p
 
 | Layer | Tool |
 |---|---|
-| Framework | React 18 + TypeScript |
+| Framework | React 19 + TypeScript |
 | Build tool | Vite 8 |
 | Styling | Tailwind CSS v3 + plain CSS component classes |
 | Fonts | Google Fonts (Barlow Condensed, Barlow, Share Tech Mono) |
@@ -25,6 +25,7 @@ No external component libraries. No CSS-in-JS. No state management library.
 src/
   components/        One file per section — Nav, Hero, About, Experience,
                      Projects, Hackathons, Contact
+                     plus BootSequence and legacy DatasheetBanner
   context/
     ThemeContext.tsx  Light/dark theme state, localStorage persistence
   hooks/
@@ -34,6 +35,8 @@ App.tsx               Composes all sections, owns the data-theme root div
 index.html            Google Fonts <link> tags live here
 tailwind.config.js    Custom palette, font families, keyframe/animation registry
 ```
+
+`DatasheetBanner.tsx` still exists in the codebase, but it is currently not rendered in `App.tsx`.
 
 ---
 
@@ -158,7 +161,8 @@ These are the classes to reach for first when building new UI:
 
 | Class | What it does |
 |---|---|
-| `.section-wrapper` | Centers content, max-width 72rem, padding top/bottom 7rem |
+| `.section-wrapper` | Centers content, max-width 72rem, padding top/bottom 4rem |
+| `.premium-main` | Applies subtle auto-dividers between sibling sections |
 | `.heading-eyebrow` | Small mono label above a section heading |
 | `.section-heading` | Large condensed uppercase heading with animated underline |
 | `.bp-card` | Standard card — white/dark bg, cobalt top border, shadow, hover lift |
@@ -249,10 +253,13 @@ Section data lives as a const array at the top of the component file — not in 
 
 ```tsx
 // Top of Experience.tsx
-const PLACEHOLDER_ENTRIES: TimelineEntry[] = [ ... ]
+const EXPERIENCE_ENTRIES: TimelineEntry[] = [ ... ]
 
 // Top of Projects.tsx
-const PLACEHOLDER_PROJECTS: Project[] = [ ... ]
+const PROJECTS: Project[] = [ ... ]
+
+// Top of Hackathons.tsx
+const HACKATHONS: Hackathon[] = [ ... ]
 ```
 
 When filling in real content, edit these arrays. The shape is typed — TypeScript will error if a required field is missing.
@@ -267,6 +274,22 @@ interface Project {
   tags: string[]        // rendered as .tag-pill
   links: { label: string; href: string }[]
   featured?: boolean    // shows a 'FEATURED' badge
+}
+```
+
+### Hackathon shape
+
+```ts
+interface Hackathon {
+  number: string
+  name: string
+  event: string
+  date: string
+  description: string
+  outcome: string
+  tags: string[]
+  link?: string
+  linkLabel?: string
 }
 ```
 
@@ -299,7 +322,8 @@ const NAV_LINKS = [
 ]
 ```
 
-To add a new section: add its `id` here, add the component to `App.tsx` with a matching `id` on its `<section>` tag, and add a `<div className="section-divider" />` between it and its neighbours.
+To add a new section: add its `id` here and add the component to `App.tsx` with a matching `id` on its `<section>` tag.  
+You do not need to add manual divider elements between sections because `premium-main` handles section separators.
 
 Active section tracking uses an `IntersectionObserver` with `rootMargin: '-40% 0px -55% 0px'`, which fires when a section occupies the middle 5% of the viewport.
 
@@ -310,7 +334,7 @@ Active section tracking uses an `IntersectionObserver` with `rootMargin: '-40% 0
 1. Create `src/components/NewSection.tsx` following the section structure pattern above.
 2. Give the `<section>` a unique `id` (e.g. `id="new-section"`).
 3. Add a `NAV_LINKS` entry in `Nav.tsx` with matching `href`.
-4. Add the component and a `<div className="section-divider" />` in `App.tsx`.
+4. Add the component in `App.tsx` inside `<main className="premium-main">`.
 5. Use `var(--...)` for all colours. Use `.bp-card` for cards. Use `.tag-pill` for tech tags.
 
 ---

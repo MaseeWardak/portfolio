@@ -9,40 +9,20 @@ interface TimelineEntry {
   tags: string[]
 }
 
-const PLACEHOLDER_ENTRIES: TimelineEntry[] = [
+const EXPERIENCE_ENTRIES: TimelineEntry[] = [
   {
-    role: 'Placeholder Role Title',
-    company: 'Company Name Inc.',
-    period: 'Month 20XX — Month 20XX',
-    location: 'City, Country',
+    role: 'Software Developer Intern & Product Manager',
+    company: 'Novika',
+    period: 'Current Coop',
+    location: 'Startup Environment',
     bullets: [
-      'Placeholder bullet one — describe a meaningful impact you made here. Use numbers and outcomes.',
-      'Placeholder bullet two — another accomplishment, technical contribution, or leadership moment.',
-      'Placeholder bullet three — mention scale, tools, or collaboration if relevant.',
+      'Conducted 25 customer discovery interviews with designers and suppliers to validate Novika\'s core business hypothesis, translating findings directly into roadmap decisions.',
+      'Owned end to end delivery of 6+ product systems including the Moodboard platform, Compare mode, and Document generation workflow, Novika\'s most technically complex feature areas.',
+      'Architected and shipped the Moodboard + Compare experience from scratch: canvas interactions, Supabase persistence, real time comparison tooling, and an AI powered material assistant with conversation history.',
+      'Performed a codebase security audit, evaluating vulnerability surface and delivering a prioritized remediation recommendation to the founding team.',
+      'Operated across product and engineering simultaneously, defining requirements, making tradeoff calls, and shipping fast under early stage startup constraints.',
     ],
-    tags: ['React', 'TypeScript', 'Node.js'],
-  },
-  {
-    role: 'Another Placeholder Role',
-    company: 'Startup or Lab Name',
-    period: 'Month 20XX — Month 20XX',
-    location: 'Remote',
-    bullets: [
-      'Placeholder bullet one — frame the scope of the project you owned.',
-      'Placeholder bullet two — highlight a technical decision you made and why.',
-    ],
-    tags: ['Python', 'PostgreSQL', 'Docker'],
-  },
-  {
-    role: 'Earlier Role or Internship',
-    company: 'Organization Name',
-    period: 'Month 20XX — Month 20XX',
-    location: 'City, Country',
-    bullets: [
-      'Placeholder bullet one — even early roles can showcase initiative or learning.',
-      'Placeholder bullet two — mention mentorship, tools, or team size.',
-    ],
-    tags: ['JavaScript', 'AWS', 'REST APIs'],
+    tags: ['React', 'TypeScript', 'Supabase', 'Product Strategy', 'Security'],
   },
 ]
 
@@ -136,7 +116,7 @@ export default function Experience() {
 
         {/* Heading */}
         <div className={`animate-on-scroll ${inView ? 'in-view' : ''}`}>
-          <span className="heading-eyebrow">Experience</span>
+          <span className="heading-eyebrow">2.0 Application Circuits</span>
           <h2 className="section-heading">Where I've Worked</h2>
         </div>
 
@@ -144,7 +124,7 @@ export default function Experience() {
         <div className="relative" ref={lineRef}>
           <div className={`timeline-line ${lineInView ? 'in-view' : ''}`} />
           <div className="pl-16 space-y-0">
-            {PLACEHOLDER_ENTRIES.map((entry, i) => (
+            {EXPERIENCE_ENTRIES.map((entry, i) => (
               <TimelineItem key={i} entry={entry} index={i} />
             ))}
           </div>

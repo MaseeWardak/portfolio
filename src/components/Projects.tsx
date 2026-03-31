@@ -9,49 +9,23 @@ interface Project {
   featured?: boolean
 }
 
-const PLACEHOLDER_PROJECTS: Project[] = [
+const PROJECTS: Project[] = [
   {
     number: '01',
-    title: 'Placeholder Project Alpha',
-    description: 'A short, punchy description of what this project does and why it matters. Mention the core problem it solves and the tech stack you reached for. Two to three sentences.',
-    tags: ['React', 'TypeScript', 'Node.js', 'PostgreSQL'],
-    links: [{ label: 'GitHub', href: '#' }, { label: 'Live', href: '#' }],
+    title: 'Smart Bluetooth Rover',
+    description:
+      'Arduino powered rover with a laser cut plywood chassis, custom steering using an MG90S servo, Bluetooth control via HC 05, and automatic ultrasonic braking. Focused on motor control, sensor integration, and embedded systems fundamentals.',
+    tags: ['Arduino', 'Embedded Systems', 'Bluetooth', 'Ultrasonic Sensors'],
+    links: [{ label: 'GitHub', href: 'https://github.com/MaseeWardak/smart-bluetooth-rover' }],
     featured: true,
   },
   {
     number: '02',
-    title: 'Placeholder Project Beta',
-    description: 'Another project description goes here. Lead with impact — how many users, what performance gains, or what novel approach you took. Keep it scannable.',
-    tags: ['Python', 'FastAPI', 'Docker', 'AWS'],
-    links: [{ label: 'GitHub', href: '#' }],
-  },
-  {
-    number: '03',
-    title: 'Placeholder Project Gamma',
-    description: 'Third project. Could be an open-source tool, a side experiment, or a collaborative build. What did you learn from it?',
-    tags: ['Next.js', 'Tailwind', 'Supabase'],
-    links: [{ label: 'GitHub', href: '#' }, { label: 'Demo', href: '#' }],
-  },
-  {
-    number: '04',
-    title: 'Placeholder Project Delta',
-    description: 'Fourth project description. Consider mentioning team size, timeline, or the most interesting technical challenge you had to overcome.',
-    tags: ['Go', 'gRPC', 'Redis', 'Kubernetes'],
-    links: [{ label: 'GitHub', href: '#' }],
-  },
-  {
-    number: '05',
-    title: 'Placeholder Project Epsilon',
-    description: 'Fifth entry. Useful for showing breadth — perhaps a lower-level systems project, a data-heavy pipeline, or a hardware integration.',
-    tags: ['C++', 'Raspberry Pi', 'MQTT', 'InfluxDB'],
-    links: [{ label: 'GitHub', href: '#' }],
-  },
-  {
-    number: '06',
-    title: 'Placeholder Project Zeta',
-    description: 'Sixth project slot. Even a small but polished utility project demonstrates taste. What would you build just because you wanted it to exist?',
-    tags: ['Rust', 'WebAssembly', 'TypeScript'],
-    links: [{ label: 'GitHub', href: '#' }, { label: 'Article', href: '#' }],
+    title: 'ThermaRest Thermal Regulation Device',
+    description:
+      'Arduino R4 prototype using Peltier modules to automatically cool patients while monitoring body temperature and GSR. Includes LCD status display and relay control, designed as a safety focused concept to improve patient sleep comfort.',
+    tags: ['Arduino R4', 'Peltier Modules', 'Medical Prototype', 'Sensor Systems'],
+    links: [{ label: 'GitHub', href: 'https://github.com/MaseeWardak/ThermaRest-Thermal-Regulation-Device' }],
   },
 ]
 
@@ -148,13 +122,13 @@ export default function Projects() {
 
         {/* Heading */}
         <div className={`animate-on-scroll ${inView ? 'in-view' : ''}`}>
-          <span className="heading-eyebrow">Projects</span>
+          <span className="heading-eyebrow">3.0 Reference Designs</span>
           <h2 className="section-heading">What I've Built</h2>
         </div>
 
         {/* Card grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {PLACEHOLDER_PROJECTS.map((project, i) => (
+          {PROJECTS.map((project, i) => (
             <ProjectCard key={project.number} project={project} index={i} />
           ))}
         </div>
@@ -165,7 +139,9 @@ export default function Projects() {
           style={{ transitionDelay: '400ms' }}
         >
           <a
-            href="#"
+            href="https://github.com/MaseeWardak"
+            target="_blank"
+            rel="noreferrer"
             className="font-mono inline-flex items-center gap-2 transition-colors duration-200"
             style={{ fontSize: '0.8rem', letterSpacing: '0.15em', color: 'var(--text-muted)' }}
             onMouseEnter={(e) => { e.currentTarget.style.color = 'var(--accent)' }}

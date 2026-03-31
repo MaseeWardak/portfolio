@@ -84,6 +84,11 @@
 
   html {
     scroll-behavior: smooth;
+    scroll-padding-top: 4.5rem;
+  }
+
+  section {
+    scroll-margin-top: 4.5rem;
   }
 
   body {
@@ -125,6 +130,15 @@
    ═══════════════════════════════════════════════════════════════════════ */
 
 @layer components {
+  .premium-main > section + section::before {
+    content: '';
+    display: block;
+    width: min(88%, 72rem);
+    margin: 0 auto;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--border), transparent);
+    opacity: 0.7;
+  }
 
   /* ── Section wrapper ───────────────────────────────────── */
   .section-wrapper {
@@ -132,8 +146,8 @@
     z-index: 10;
     padding-left: 1.5rem;
     padding-right: 1.5rem;
-    padding-top: 7rem;
-    padding-bottom: 7rem;
+    padding-top: 4rem;
+    padding-bottom: 4rem;
     width: 100%;
     max-width: 72rem;
     margin-left: auto;
@@ -281,6 +295,99 @@
     border-color: var(--accent);
     color: var(--accent);
   }
+
+  .hero-panel {
+    border: 1px solid var(--border);
+    background: linear-gradient(165deg, var(--bg-card), var(--bg-surface));
+    box-shadow: var(--shadow-card);
+    border-radius: 24px;
+    padding: clamp(1.5rem, 4vw, 2.6rem);
+    display: grid;
+    gap: 2rem;
+    align-items: start;
+    grid-template-columns: 1fr;
+  }
+
+  .hero-facts {
+    border: 1px solid var(--border);
+    background: var(--accent-bg);
+    border-radius: 16px;
+    padding: 1.1rem 1rem;
+  }
+
+  .hero-facts-title {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.66rem;
+    letter-spacing: 0.17em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 0.7rem;
+  }
+
+  .hero-fact-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.7rem;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.66rem;
+    letter-spacing: 0.08em;
+    color: var(--text-secondary);
+    padding: 0.52rem 0;
+    border-top: 1px solid var(--border);
+  }
+
+  .hero-fact-row span:last-child {
+    color: var(--text-primary);
+    text-align: right;
+  }
+
+  .about-highlight-row {
+    border: 1px solid var(--border);
+    background: var(--bg-card);
+    box-shadow: var(--shadow-card);
+    border-radius: 12px;
+    padding: 0.85rem 0.95rem;
+    display: flex;
+    gap: 0.8rem;
+    align-items: flex-start;
+  }
+
+  .about-highlight-index {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.62rem;
+    color: var(--accent);
+    letter-spacing: 0.12em;
+    margin-top: 0.2rem;
+  }
+
+  .contact-callout {
+    border: 1px solid var(--border);
+    background: var(--bg-card);
+    box-shadow: var(--shadow-card);
+    border-radius: 20px;
+    padding: clamp(1.25rem, 3vw, 2rem);
+  }
+
+  .contact-link-row {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem 1rem;
+    border-radius: 14px;
+    border: 1px solid var(--border);
+    background: var(--bg-card);
+    box-shadow: var(--shadow-card);
+    color: var(--text-muted);
+    transition: border-color 0.22s ease, box-shadow 0.22s ease, color 0.22s ease, transform 0.22s ease;
+  }
+
+  .contact-link-row:hover {
+    border-color: var(--accent);
+    box-shadow: var(--shadow-hover);
+    color: var(--accent);
+    transform: translateY(-2px);
+  }
 }
 
 /* ═══════════════════════════════════════════════════════════════════════
@@ -382,6 +489,42 @@
   transition: color 0.35s ease;
 }
 
+.hero-surname {
+  display: inline-flex;
+  align-items: center;
+  gap: clamp(0.35rem, 1vw, 0.6rem);
+}
+
+.hero-bolt {
+  position: relative;
+  width: clamp(1.35rem, 2.3vw, 2.1rem);
+  height: clamp(1.35rem, 2.3vw, 2.1rem);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  filter: drop-shadow(0 0 10px rgba(255, 204, 0, 0.55)) drop-shadow(0 0 20px rgba(255, 180, 0, 0.4));
+  animation: bolt-float 2.6s ease-in-out infinite;
+}
+
+.hero-bolt::before {
+  content: '';
+  position: absolute;
+  inset: -24%;
+  border-radius: 999px;
+  background: radial-gradient(circle, rgba(255, 204, 0, 0.35) 0%, rgba(255, 204, 0, 0) 70%);
+  filter: blur(8px);
+  animation: bolt-aura 2.6s ease-in-out infinite;
+}
+
+.hero-bolt-svg {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  z-index: 1;
+  transform-origin: center;
+  animation: bolt-flicker 1.8s steps(12, end) infinite;
+}
+
 .cursor-blink {
   display: inline-block;
   width: 2px;
@@ -439,6 +582,299 @@
 }
 
 /* ═══════════════════════════════════════════════════════════════════════
+   BOOT SEQUENCE OVERLAY
+   ═══════════════════════════════════════════════════════════════════════ */
+
+.boot-screen {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: #050d1a;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+}
+
+.boot-screen.exiting {
+  animation: boot-fade-out 0.6s ease forwards;
+}
+
+.boot-content {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.82rem;
+  line-height: 1.9;
+  width: 100%;
+  max-width: 700px;
+  color: #7a92b8;
+}
+
+.boot-progress-row {
+  display: flex;
+  align-items: center;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.82rem;
+  gap: 0;
+}
+
+.boot-progress-track {
+  flex: 1;
+  height: 1em;
+  background: #0a1628;
+  border: 1px solid #1a3050;
+  overflow: hidden;
+  margin: 0 0.15rem;
+}
+
+.boot-progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #0047ab, #1a6fd4);
+  width: 0;
+  animation: boot-progress-grow 2.4s ease-in-out forwards;
+}
+
+.boot-skip-hint {
+  position: absolute;
+  bottom: 2rem;
+  right: 2rem;
+  color: #1d3a55;
+  font-size: 0.62rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  animation: blink 2.4s step-end infinite;
+  animation-delay: 1s;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════
+   DATASHEET BANNER (legacy styles, currently unused)
+   ═══════════════════════════════════════════════════════════════════════ */
+
+.ds-banner {
+  position: fixed;
+  top: 4rem; /* sits directly below the nav (h-16 = 4rem) */
+  left: 0;
+  right: 0;
+  z-index: 40;
+  height: 3.5rem;
+  background: var(--bg-surface);
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.65rem;
+  letter-spacing: 0.08em;
+  transition: background 0.35s ease, border-color 0.35s ease;
+}
+
+/* Inner container matches nav's max-w-6xl mx-auto px-6 */
+.ds-banner-inner {
+  display: flex;
+  align-items: stretch;
+  height: 100%;
+  width: 100%;
+  max-width: 72rem; /* Tailwind max-w-6xl */
+  margin: 0 auto;
+  padding: 0 1.5rem;
+}
+
+.ds-banner-col {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 0 1.25rem;
+  gap: 0.2rem;
+  flex: 1;
+}
+
+.ds-banner-col--right {
+  text-align: right;
+  align-items: flex-end;
+}
+
+.ds-banner-divider {
+  width: 1px;
+  background: var(--border);
+  margin: 0.6rem 0;
+}
+
+.ds-banner-primary {
+  color: var(--text-primary);
+  font-size: 0.66rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.ds-banner-secondary {
+  color: var(--text-muted);
+  font-size: 0.58rem;
+  letter-spacing: 0.08em;
+}
+
+/* ── DatasheetBanner responsive ── */
+
+/* Below md (768px): hide middle column and its left divider */
+@media (max-width: 767px) {
+  /* middle column = 3rd child (col A, divider, col B, divider, col C) */
+  .ds-banner > .ds-banner-col:nth-child(3),
+  .ds-banner > .ds-banner-divider:first-of-type {
+    display: none;
+  }
+}
+
+/* Below 480px: hide banner entirely and shrink scroll offsets */
+@media (max-width: 479px) {
+  .ds-banner {
+    display: none;
+  }
+
+  html {
+    scroll-padding-top: 4.5rem;
+  }
+
+  section {
+    scroll-margin-top: 4.5rem;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════════════
+   DATASHEET SECTIONS
+   ═══════════════════════════════════════════════════════════════════════ */
+
+/* Subsection label e.g. "1.1 GENERAL DESCRIPTION" */
+.ds-section-label {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.62rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 0.75rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.ds-section-label::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--border);
+  max-width: 4rem;
+}
+
+/* Ratings table */
+.ds-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.7rem;
+}
+
+.ds-table th,
+.ds-table td {
+  border: 1px solid var(--border);
+  padding: 0.45rem 0.75rem;
+  text-align: left;
+  white-space: nowrap;
+  transition: border-color 0.35s ease;
+}
+
+.ds-table th {
+  background: var(--accent-bg);
+  color: var(--accent);
+  font-size: 0.6rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  font-weight: 400;
+}
+
+.ds-table td {
+  color: var(--text-primary);
+}
+
+.ds-table td:first-child {
+  color: var(--text-secondary);
+  min-width: 12rem;
+}
+
+.ds-table td:not(:first-child) {
+  text-align: center;
+  color: var(--accent);
+  min-width: 4rem;
+}
+
+.ds-table tbody tr:hover td {
+  background: var(--accent-bg);
+}
+
+/* Footnote */
+.ds-note {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.62rem;
+  color: var(--text-muted);
+  line-height: 1.7;
+  padding: 0.6rem 0.75rem;
+  border-left: 2px solid var(--border);
+  margin-top: 0.75rem;
+  transition: border-color 0.35s ease;
+}
+
+/* Interface specification row */
+.ds-interface-row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.55rem 0.75rem;
+  border: 1px solid var(--border);
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.72rem;
+  transition: border-color 0.2s ease, background 0.2s ease;
+  cursor: default;
+}
+
+.ds-interface-row:not(:last-child) {
+  border-bottom: none;
+}
+
+.ds-interface-row:hover {
+  background: var(--accent-bg);
+  border-color: var(--accent);
+}
+
+/* When hovering a row that has a sibling below, restore its border-bottom */
+.ds-interface-row:hover + .ds-interface-row {
+  border-top-color: var(--accent);
+}
+
+.ds-protocol-badge {
+  font-size: 0.56rem;
+  letter-spacing: 0.12em;
+  padding: 0.15rem 0.4rem;
+  background: var(--accent-bg);
+  color: var(--accent);
+  border: 1px solid var(--border);
+  min-width: 3rem;
+  text-align: center;
+  text-transform: uppercase;
+  transition: background 0.2s ease, border-color 0.2s ease;
+}
+
+.ds-interface-row:hover .ds-protocol-badge {
+  background: var(--accent);
+  color: var(--accent-text);
+  border-color: var(--accent);
+}
+
+.ds-interface-label {
+  color: var(--text-secondary);
+  min-width: 5rem;
+}
+
+.ds-interface-value {
+  color: var(--text-primary);
+  flex: 1;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════
    SECTION DIVIDERS
    ═══════════════════════════════════════════════════════════════════════ */
 
@@ -448,6 +884,12 @@
   margin: 0 auto;
   max-width: 80%;
   transition: background 0.35s ease;
+}
+
+@media (min-width: 1024px) {
+  .hero-panel {
+    grid-template-columns: minmax(0, 1.4fr) minmax(260px, 0.8fr);
+  }
 }
 
 /* ═══════════════════════════════════════════════════════════════════════
@@ -491,4 +933,33 @@
   0%, 100% { transform: translate(0, 0) scale(1); }
   33%       { transform: translate(20px, -15px) scale(1.04); }
   66%       { transform: translate(-15px, 10px) scale(0.97); }
+}
+
+@keyframes bolt-float {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  50% { transform: translateY(-2px) rotate(-2deg); }
+}
+
+@keyframes bolt-flicker {
+  0%, 100% { opacity: 1; filter: saturate(1); }
+  15% { opacity: 0.9; filter: saturate(1.2); }
+  32% { opacity: 1; filter: saturate(1.1); }
+  48% { opacity: 0.78; filter: saturate(1.35); }
+  61% { opacity: 1; filter: saturate(1.2); }
+  79% { opacity: 0.86; filter: saturate(1.3); }
+}
+
+@keyframes bolt-aura {
+  0%, 100% { opacity: 0.62; transform: scale(1); }
+  50% { opacity: 0.95; transform: scale(1.08); }
+}
+
+@keyframes boot-progress-grow {
+  from { width: 0; }
+  to   { width: 100%; }
+}
+
+@keyframes boot-fade-out {
+  from { opacity: 1; }
+  to   { opacity: 0; }
 }

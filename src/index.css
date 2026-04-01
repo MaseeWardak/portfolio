@@ -342,6 +342,19 @@
     text-align: right;
   }
 
+  .hero-fact-value-with-bolt {
+    display: inline-flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: clamp(0.25rem, 0.7vw, 0.45rem);
+  }
+
+  .hero-facts .hero-bolt {
+    width: clamp(0.95rem, 1.4vw, 1.2rem);
+    height: clamp(0.95rem, 1.4vw, 1.2rem);
+    flex-shrink: 0;
+  }
+
   .about-highlight-row {
     border: 1px solid var(--border);
     background: var(--bg-card);
@@ -479,6 +492,16 @@
   background: var(--accent-bg);
 }
 
+/* Logo mascots: kill solid white backgrounds on GIF/MP4/raster without re-editing.
+   True transparent PNG/SVG exports can use .nav-logo-sprite--opaque (no blend). */
+.nav-logo-sprite {
+  mix-blend-mode: multiply;
+}
+
+.nav-logo-sprite--opaque {
+  mix-blend-mode: normal;
+}
+
 /* ═══════════════════════════════════════════════════════════════════════
    HERO
    ═══════════════════════════════════════════════════════════════════════ */
@@ -489,10 +512,78 @@
   transition: color 0.35s ease;
 }
 
-.hero-surname {
+/* First name stays one line */
+.hero-name-line {
   display: inline-flex;
-  align-items: center;
-  gap: clamp(0.35rem, 1vw, 0.6rem);
+  flex-wrap: nowrap;
+  align-items: baseline;
+  gap: 0;
+  white-space: nowrap;
+}
+
+/* Room for Sonic above the first “A” (light mode only) */
+.hero-name-line:has(.hero-first-a-sonic) {
+  padding-top: 0.22em;
+}
+
+/* First “A”: Sonic sits on the cap (light mode) — bottom of sprite meets top of A */
+.hero-first-a-char {
+  position: relative;
+  display: inline-block;
+  line-height: 1;
+}
+
+.hero-first-a-letter {
+  position: relative;
+  z-index: 1;
+}
+
+.hero-first-a-sonic {
+  position: absolute;
+  left: 50%;
+  /* Feet near the cap — only tiny nudges from center */
+  bottom: calc(100% - 0.16em);
+  z-index: 2;
+  display: block;
+  width: 0.42em;
+  height: 0.42em;
+  max-width: 1.55rem;
+  max-height: 1.55rem;
+  object-fit: contain;
+  object-position: center bottom;
+  image-rendering: pixelated;
+  pointer-events: none;
+  transform: translate(calc(-50% - 0.04em), 0.06em);
+}
+
+/* Last “H”: Tails sits in the lower counter (dark mode); letter on top at stroke edges */
+.hero-last-h-char {
+  position: relative;
+  display: inline-block;
+  line-height: 1;
+}
+
+.hero-last-h-letter {
+  position: relative;
+  z-index: 1;
+}
+
+.hero-last-h-tails {
+  position: absolute;
+  left: 68%;
+  /* Lower counter: toward right stem; nudged up so boots stay inside H */
+  top: 82%;
+  transform: translate(-50%, -50%);
+  z-index: 2;
+  display: block;
+  width: 0.47em;
+  height: 0.47em;
+  max-width: 1.72rem;
+  max-height: 1.72rem;
+  object-fit: contain;
+  object-position: center;
+  image-rendering: pixelated;
+  pointer-events: none;
 }
 
 .hero-bolt {

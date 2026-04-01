@@ -1,5 +1,6 @@
-import { useEffect, useReducer, useRef } from 'react'
+import { useCallback, useEffect, useId, useReducer, useRef, useState } from 'react'
 import { useLanguage, type Language } from '../context/LanguageContext'
+import { useTheme } from '../context/ThemeContext'
 
 const HERO_COPY = {
   en: {
@@ -145,8 +146,111 @@ function useTypewriter(strings: string[], speed = 60, pause = 1800) {
   return state.display
 }
 
+const HERO_SONIC_STATIC = ['/characters/sonic.svg', '/characters/sonic.png'] as const
+
+/** GIF → MP4 → static; above first “A” in light mode only (caller gates). */
+function HeroEmbeddedSonic() {
+  type Stage = 'gif' | 'mp4' | 'static'
+  const [stage, setStage] = useState<Stage>('gif')
+  const [staticIdx, setStaticIdx] = useState(0)
+  const videoRef = useRef<HTMLVideoElement | null>(null)
+
+  const tryPlay = useCallback(() => {
+    videoRef.current?.play().catch(() => {})
+  }, [])
+
+  useEffect(() => {
+    if (stage === 'mp4') tryPlay()
+  }, [stage, tryPlay])
+
+  if (stage === 'gif') {
+    return (
+      <img
+        key="hero-sonic-gif"
+        src="/characters/sonic.gif"
+        alt=""
+        aria-hidden="true"
+        draggable={false}
+        loading="eager"
+        decoding="async"
+        className="hero-first-a-sonic pointer-events-none nav-logo-sprite"
+        onError={() => setStage('mp4')}
+      />
+    )
+  }
+
+  if (stage === 'mp4') {
+    return (
+      <video
+        ref={videoRef}
+        key="hero-sonic-mp4"
+        className="hero-first-a-sonic pointer-events-none nav-logo-sprite"
+        src="/characters/sonic.mp4"
+        autoPlay
+        muted
+        loop
+        playsInline
+        preload="auto"
+        aria-hidden="true"
+        onError={() => setStage('static')}
+        onLoadedData={tryPlay}
+      />
+    )
+  }
+
+  const src = HERO_SONIC_STATIC[staticIdx] ?? HERO_SONIC_STATIC[HERO_SONIC_STATIC.length - 1]
+
+  return (
+    <img
+      key={`hero-sonic-static-${staticIdx}`}
+      src={src}
+      alt=""
+      aria-hidden="true"
+      draggable={false}
+      loading="eager"
+      decoding="async"
+      className="hero-first-a-sonic pointer-events-none nav-logo-sprite"
+      onError={() => {
+        setStaticIdx((i) => (i + 1 < HERO_SONIC_STATIC.length ? i + 1 : i))
+      }}
+    />
+  )
+}
+
+function HeroBoltMark() {
+  const gradId = `hero-bolt-grad-${useId().replace(/:/g, '')}`
+  return (
+    <span className="hero-bolt" aria-hidden="true">
+      <svg className="hero-bolt-svg" width="64" height="64" viewBox="0 0 64 64" fill="none">
+        <defs>
+          <linearGradient id={gradId} x1="16" y1="8" x2="48" y2="56" gradientUnits="userSpaceOnUse">
+            <stop offset="0%" stopColor="#ffe870" />
+            <stop offset="45%" stopColor="#ffcc00" />
+            <stop offset="100%" stopColor="#f0a400" />
+          </linearGradient>
+        </defs>
+        <path
+          d="M36.5 6L18.5 33h13l-5 25 19-30H33.5l3-22z"
+          fill={`url(#${gradId})`}
+          stroke="#fff5b3"
+          strokeWidth="1.5"
+          strokeLinejoin="round"
+        />
+        <path
+          d="M36.5 6L18.5 33h13l-5 25 19-30H33.5l3-22z"
+          stroke="var(--accent)"
+          strokeWidth="2.6"
+          strokeOpacity="0.3"
+          strokeLinejoin="round"
+        />
+      </svg>
+    </span>
+  )
+}
+
 export default function Hero() {
   const { language } = useLanguage()
+  const { theme } = useTheme()
   const copy = HERO_COPY[language]
   const typed = useTypewriter(copy.typewriter)
   const heroRef = useRef<HTMLElement | null>(null)
@@ -231,36 +335,31 @@ export default function Hero() {
                 animation: 'fade-up 0.7s ease 0.2s both',
               }}
             >
-              Maseehullah
-              <br />
-              <span className="hero-surname">
-                <span style={{ color: 'var(--accent)' }}>Wardak</span>
-                <span className="hero-bolt" aria-hidden="true">
-                  <svg className="hero-bolt-svg" width="64" height="64" viewBox="0 0 64 64" fill="none">
-                    <defs>
-                      <linearGradient id="boltGradient" x1="16" y1="8" x2="48" y2="56" gradientUnits="userSpaceOnUse">
-                        <stop offset="0%" stopColor="#ffe870" />
-                        <stop offset="45%" stopColor="#ffcc00" />
-                        <stop offset="100%" stopColor="#f0a400" />
-                      </linearGradient>
-                    </defs>
-                    <path
-                      d="M36.5 6L18.5 33h13l-5 25 19-30H33.5l3-22z"
-                      fill="url(#boltGradient)"
-                      stroke="#fff5b3"
-                      strokeWidth="1.5"
-                      strokeLinejoin="round"
+              <span className="hero-name-line" dir="ltr">
+                <span>M</span>
+                <span className="hero-first-a-char">
+                  <span className="hero-first-a-letter">a</span>
+                  {theme === 'light' && <HeroEmbeddedSonic />}
+                </span>
+                <span>s</span>
+                <span>eehulla</span>
+                <span className="hero-last-h-char">
+                  <span className="hero-last-h-letter">h</span>
+                  {theme === 'dark' && (
+                    <img
+                      src="/characters/tails.gif"
+                      alt=""
+                      aria-hidden="true"
+                      draggable={false}
+                      loading="eager"
+                      decoding="async"
+                      className="hero-last-h-tails nav-logo-sprite--opaque"
                     />
-                    <path
-                      d="M36.5 6L18.5 33h13l-5 25 19-30H33.5l3-22z"
-                      stroke="var(--accent)"
-                      strokeWidth="2.6"
-                      strokeOpacity="0.3"
-                      strokeLinejoin="round"
-                    />
-                  </svg>
+                  )}
                 </span>
               </span>
+              <br />
+              <span style={{ color: 'var(--accent)' }}>Wardak</span>
             </h1>
 
             <p
@@ -307,10 +406,17 @@ export default function Hero() {
             style={{ animation: 'fade-up 0.7s ease 0.45s both' }}
           >
             <p className="hero-facts-title">{copy.glanceTitle}</p>
-            {copy.facts.map(([label, value]) => (
+            {copy.facts.map(([label, value], i) => (
               <div key={label} className="hero-fact-row">
                 <span>{label}</span>
-                <span>{value}</span>
+                {i === 0 ? (
+                  <span className="hero-fact-value-with-bolt">
+                    <span>{value}</span>
+                    <HeroBoltMark />
+                  </span>
+                ) : (
+                  <span>{value}</span>
+                )}
               </div>
             ))}
           </aside>

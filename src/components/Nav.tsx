@@ -134,15 +134,14 @@ export default function Nav() {
       >
         <div className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between gap-8">
 
-          {/* Logo */}
+          {/* Scroll to top (Sonic easter egg lives on hero “S”) */}
           <button
+            type="button"
             onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-            className="font-mono tracking-widest text-base shrink-0 transition-colors duration-200"
-            style={{ color: 'var(--text-primary)' }}
-            onMouseEnter={(e) => { e.currentTarget.style.color = 'var(--accent)' }}
-            onMouseLeave={(e) => { e.currentTarget.style.color = 'var(--text-primary)' }}
+            aria-label="Scroll to top"
+            className="shrink-0 inline-flex items-center justify-center p-1 rounded-md transition-opacity duration-200 hover:opacity-85"
           >
-            WARDAK<span style={{ color: 'var(--accent)', animation: 'blink 1s step-end infinite' }}>_</span>
+            <span className="block h-6 w-6 shrink-0" aria-hidden />
           </button>
 
           {/* Desktop links */}
